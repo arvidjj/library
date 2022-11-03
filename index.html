@@ -17,9 +17,10 @@
 <body>
     <header>
         <h1><strong>Book</strong> Library</h1>
+        <hr>
     </header>
     <main>
-        <hr>
+        
         <div class="options">
             <button id="addBookButton"><span class="material-symbols-outlined">
                 add_circle
@@ -27,35 +28,20 @@
             <button id="refreshBooksButton">Refresh</button>
         </div>
         <div class="cardsContainer" id="booksContainer">
-            <div class="book">
-                <div class="bookInfo">
-                    <h3><strong>The Hobbit</strong></h3>
-                    <p><strong>By:</strong> tolkien</p>
-                    <p><strong>Pages:</strong> 50</p>
-                </div>
-                <button class="readButton notRead">Not read yet</button>
-            </div>
-            <div class="book">
-                <div class="bookInfo">
-                    <h3><strong>The Hobbit</strong></h3>
-                    <p><strong>By:</strong> tolkien</p>
-                    <p><strong>Pages:</strong> 50</p>
-                </div>
-                <button class="readButton read">Read</button>
-            </div>
         </div>
         <div class="addBookContainer" id="addBookScreen">
             <h3>Add <strong>Book</strong></h3>
             <form action="">
-                <label for="title">Title</label>
+                <label for="title">Title *</label>
                 <input type="text" name="title" id="title">
 
-                <label for="author">Author</label>
+                <label for="author">Author *</label>
                 <input type="text" name="author" id="author">
 
-                <label for="pages">Pages</label>
+                <label for="pages">Pages *</label>
                 <input type="number" name="pages" id="pages">
 
+                <span class="error" id="formError"></span>
                 <div class="addBookButtons">
                     <button type="submit" id="addBook">Add</button>
                     <button id="cancelAddBook">Cancel</button>
@@ -64,7 +50,6 @@
         </div>
     </main>
     <footer>
-        <hr>
         <div class="contactItem">
             <a href="https://github.com/arvidjj" target="_blank">
                 <img src="img/github.png" alt="Github">
