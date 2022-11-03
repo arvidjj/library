@@ -35,7 +35,7 @@ function displayBooks() {
 function displayAddForm() {
     addButton.setAttribute('disabled', 'disabled')
     booksContainer.style.display = 'none';
-    addBookScreen.style.display = 'initial';
+    addBookScreen.style.display = 'flex';
 }
 
 function renderBooks() {
