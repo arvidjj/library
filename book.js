@@ -43,14 +43,17 @@ function renderBooks() {
     myLibrary.forEach((book, index) => {
         const bookCard = document.createElement('div');
         bookCard.classList.add('book')
-        bookCard.setAttribute('id', `book${index}`)
+
+        const id = `book-${index}`
+        bookCard.setAttribute('id', id)
+        
         let readYet;
         switch (book.read) {
             case true:
-                readYet = '<button class="readButton read">Read</button>'
+                readYet = `<button class="readButton read" onclick="readBook('${id}')">Read</button>`
                 break;
             case false:
-                readYet = '<button class="readButton notRead">Not read yet</button>'
+                readYet = `<button class="readButton notRead" onclick="readBook('${id}')">Not read yet</button>`
                 break;
         }
         bookCard.innerHTML = `<div class="bookInfo">
@@ -59,7 +62,11 @@ function renderBooks() {
         </span><strong>${book.title}</strong></h3>
         <p><strong>By:</strong> ${book.author}</p>
         <p><strong>Pages:</strong> ${book.pages}</p></div>
-        <div class="cardOptions"><button id="deleteButton" class="iconButton">Delete</button><button id="modifyButton" class="iconButton">Modify</button></div>
+        <div class="cardOptions">
+        <button id="deleteButton" class="iconButton" onclick="deleteBook('${id}')"><span class="material-symbols-outlined filledIcon ">
+        delete_forever
+        </span></button>
+        </div>
         ${readYet}
         `;
         booksContainer.appendChild(bookCard)
@@ -116,4 +123,23 @@ function clearInputs() {
     bookTitleInput.value = '';
     bookAuthorInput.value = '';
     bookPagesInput.value = '';
+}
+
+//////MANIPULATING BOOKS//////
+
+function getIndex(book) {
+    return book.split('-')[1]
+}
+
+function deleteBook(book) { 
+    myLibrary.splice(getIndex(book), 1);
+    console.log(book + " removed")
+    renderBooks()
+}
+
+function readBook(book) {
+    const selectedBook = myLibrary[getIndex(book)]
+    selectedBook.read = !selectedBook.read;
+    myLibrary[getIndex(book)] = selectedBook
+    renderBooks()
 }

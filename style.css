@@ -51,6 +51,10 @@ button {
     align-items: center;
 }
 
+.iconButton {
+    padding: 5px;
+}
+
 button p {
     margin: 0;
     padding: 0;
@@ -215,8 +219,13 @@ span.error {
 
 .cardOptions {
     display:flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     margin-bottom:10px;
+    padding-right: 10px;
+}
+
+.filledIcon {
+    font-variation-settings: 'FILL' 1;
 }
 
 @media (min-width: 700px) {
@@ -240,6 +249,9 @@ span.error {
     }    
     main {
 
+    }
+    .options {
+        align-self: flex-start;
     }
     .cardsContainer {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));;
