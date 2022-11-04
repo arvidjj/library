@@ -1,4 +1,4 @@
-let myLibrary = []
+//let myLibrary = []
 
 class Book {
     constructor(title, author, pages, read) {
@@ -14,17 +14,65 @@ class Book {
     }
 }
 
-function addBookToLibrary(book) {
-    myLibrary.push(book)
-    console.log("Book added.")
-}
+const myLibrary = (() =>{
+    const books = []
+    const _booksContainer = document.querySelector('#booksContainer')
+
+    const addBook = (book) => (books.push(book))
+    const deleteBook = (index) => (books.splice((index), 1))
+    const readBook = (index) => {
+        const selectedBook = books[index]
+        selectedBook.read = !selectedBook.read;
+        books[index] = selectedBook
+    }
+    const renderBooks = () => {
+        _booksContainer.innerHTML = ''
+        books.forEach((book, index) => {
+            const bookCard = document.createElement('div');
+            bookCard.classList.add('book')
+    
+            const id = `book-${index}`
+            bookCard.setAttribute('id', id)
+            
+            let readYet;
+            switch (book.read) {
+                case true:
+                    readYet = `<button class="readButton read" onclick="readBook('${id}')">Read</button>`
+                    break;
+                case false:
+                    readYet = `<button class="readButton notRead" onclick="readBook('${id}')">Not read yet</button>`
+                    break;
+            }
+            bookCard.innerHTML = `<div class="bookInfo">
+            <h3><span class="material-symbols-outlined">
+            book
+            </span><strong>${book.title}</strong></h3>
+            <p><strong>By:</strong> ${book.author}</p>
+            <p><strong>Pages:</strong> ${book.pages}</p></div>
+            <div class="cardOptions">
+            <button id="deleteButton" class="iconButton" onclick="deleteBook('${id}')"><span class="material-symbols-outlined filledIcon ">
+            delete_forever
+            </span></button>
+            </div>
+            ${readYet}
+            `;
+            _booksContainer.appendChild(bookCard)
+        })
+    }
+    return {
+        addBook,
+        deleteBook,
+        readBook,
+        renderBooks
+    }
+})();
 
 const addBookScreen = document.querySelector('#addBookScreen')
 const booksContainer = document.querySelector('#booksContainer')
 const refreshButton = document.querySelector('#refreshBooksButton')
 refreshButton.addEventListener('click', function () {
     displayBooks();
-    renderBooks();
+    myLibrary.renderBooks();
 })
 
 function displayBooks() {
@@ -38,53 +86,10 @@ function displayAddForm() {
     addBookScreen.style.display = 'flex';
 }
 
-function renderBooks() {
-    booksContainer.innerHTML = ''
-    myLibrary.forEach((book, index) => {
-        const bookCard = document.createElement('div');
-        bookCard.classList.add('book')
-
-        const id = `book-${index}`
-        bookCard.setAttribute('id', id)
-        
-        let readYet;
-        switch (book.read) {
-            case true:
-                readYet = `<button class="readButton read" onclick="readBook('${id}')">Read</button>`
-                break;
-            case false:
-                readYet = `<button class="readButton notRead" onclick="readBook('${id}')">Not read yet</button>`
-                break;
-        }
-        bookCard.innerHTML = `<div class="bookInfo">
-        <h3><span class="material-symbols-outlined">
-        book
-        </span><strong>${book.title}</strong></h3>
-        <p><strong>By:</strong> ${book.author}</p>
-        <p><strong>Pages:</strong> ${book.pages}</p></div>
-        <div class="cardOptions">
-        <button id="deleteButton" class="iconButton" onclick="deleteBook('${id}')"><span class="material-symbols-outlined filledIcon ">
-        delete_forever
-        </span></button>
-        </div>
-        ${readYet}
-        `;
-        booksContainer.appendChild(bookCard)
-    })
-}
-
 const addButton = document.querySelector('#addBookButton')
 addButton.addEventListener('click', function () {
     displayAddForm()
 })
-
-addBookScreen.style.display = 'none';
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, false)
-const elPrincipito = new Book("Principito", "Antoine de Saint-Exupéry.", 150, true)
-addBookToLibrary(theHobbit)
-addBookToLibrary(elPrincipito)
-displayBooks()
-renderBooks()
 
 const cancelButtonFromAddScreen = document.querySelector('#cancelAddBook')
 const addBookButtonFromAddScreen = document.querySelector('#addBook')
@@ -109,10 +114,10 @@ form.addEventListener('submit', function (e) {
         const newBook = new Book(
             bookTitleInput.value, bookAuthorInput.value, bookPagesInput.value, false
         );
-        addBookToLibrary(newBook)
+        myLibrary.addBook(newBook)
         clearInputs()
         displayBooks()
-        renderBooks()
+        myLibrary.renderBooks()
     }
 })
 cancelButtonFromAddScreen.addEventListener('click', function (e) {
@@ -132,14 +137,22 @@ function getIndex(book) {
 }
 
 function deleteBook(book) { 
-    myLibrary.splice(getIndex(book), 1);
+    myLibrary.deleteBook(getIndex(book));
     console.log(book + " removed")
-    renderBooks()
+    myLibrary.renderBooks()
 }
 
 function readBook(book) {
-    const selectedBook = myLibrary[getIndex(book)]
-    selectedBook.read = !selectedBook.read;
-    myLibrary[getIndex(book)] = selectedBook
-    renderBooks()
+    myLibrary.readBook(getIndex(book))
+    myLibrary.renderBooks()
 }
+
+
+///INIT
+addBookScreen.style.display = 'none';
+const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, false)
+const elPrincipito = new Book("Principito", "Antoine de Saint-Exupéry.", 150, true)
+myLibrary.addBook(theHobbit)
+myLibrary.addBook(elPrincipito)
+displayBooks()
+myLibrary.renderBooks()
