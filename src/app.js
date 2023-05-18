@@ -38,12 +38,14 @@ function isFieldEmpty(field) {
 }
 const form = document.querySelector('form')
 form.addEventListener('submit', function (e) {
+    fields.forEach(f => (f.classList.remove('invalid')))
     e.preventDefault();
     console.log('adding book...')
     const emptyFields = fields.filter(f => (f.value.length === 0)); //stores empty fields
     if (emptyFields.length !== 0) { // empty fields?
         console.log('There are empty required fields!')
         formError.textContent = "There are empty fields.";
+        emptyFields.forEach(f => (f.classList.add('invalid')))
     } else {
         const newBook = new Book(
             bookTitleInput.value, bookAuthorInput.value, bookPagesInput.value, false
@@ -54,6 +56,14 @@ form.addEventListener('submit', function (e) {
         MyLibrary.renderBooks()
     }
 })
+
+fields.forEach(f => {
+    f.addEventListener('input', function() {
+        f.classList.remove('invalid');
+        formError.textContent = '';
+    });
+});
+
 cancelButtonFromAddScreen.addEventListener('click', function (e) {
     displayBooks();
     e.preventDefault();
